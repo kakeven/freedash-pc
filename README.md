@@ -1,21 +1,24 @@
 # FreeDash
 
-Um frontend desktop inspirado na interface do Aurora Dashboard para Xbox 360, desenvolvido para oferecer uma experiência moderna e organizada ao utilizar o emulador Xenia.
+Um frontend desktop inspirado no **Aurora Dashboard** para Xbox 360, criado para oferecer uma experiência mais agradável ao utilizar o emulador **Xenia**.
 
-O FreeDash funciona como um launcher para a biblioteca de jogos, exibindo capas automaticamente, permitindo personalização visual através de wallpapers e iniciando os jogos diretamente pelo Xenia em segundo plano.
+O FreeDash organiza sua biblioteca de jogos em uma interface visual com capas, permite personalizar o plano de fundo e inicia os títulos diretamente pelo Xenia, funcionando como uma camada de experiência sobre o emulador.
+
+> **⚠️ Nota**
+>
+> O FreeDash é um projeto experimental de **Vibe Coding**. Ele foi desenvolvido para explorar a ideia de recriar uma interface inspirada no Aurora Dashboard utilizando IA para acelerar o desenvolvimento. O objetivo foi validar o conceito e experimentar essa abordagem, não desenvolver um launcher de produção do zero.
 
 ## ✨ Funcionalidades
 
-- 🎮 Biblioteca de jogos com exibição das capas
+- 🎮 Biblioteca de jogos com exibição automática das capas
 - 🖼️ Plano de fundo personalizável
-- 🚀 Inicialização automática dos jogos utilizando o Xenia
+- 🚀 Inicialização dos jogos diretamente pelo Xenia
 - 📂 Organização simples da biblioteca
 - 🖥️ Interface inspirada no Aurora Dashboard
-- ⚡ Aplicação desktop utilizando Electron
+- ⚡ Aplicação desktop construída com Electron
 
 ## 🛠️ Tecnologias
 
-### Frontend
 - Vue 3
 - Vite
 - Electron
@@ -23,14 +26,13 @@ O FreeDash funciona como um launcher para a biblioteca de jogos, exibindo capas 
 
 ## 📸 Screenshots
 
-<img width="1262" height="728" alt="Captura de tela 2026-07-19 134307" src="https://github.com/user-attachments/assets/2f5fa2b4-ab45-4964-a24f-4b51d6424b61" />
+<img width="1262" height="728" alt="Biblioteca" src="https://github.com/user-attachments/assets/2f5fa2b4-ab45-4964-a24f-4b51d6424b61" />
 
-<img width="1261" height="706" alt="image" src="https://github.com/user-attachments/assets/6bdf9205-80a7-49e3-b764-4352e4f7863e" />
-
+<img width="1261" height="706" alt="Personalização" src="https://github.com/user-attachments/assets/6bdf9205-80a7-49e3-b764-4352e4f7863e" />
 
 ## 🚀 Como executar
 
-### Clone o projeto
+### Clone o repositório
 
 ```bash
 git clone https://github.com/seu-usuario/freedash.git
@@ -45,27 +47,23 @@ npm install
 ### Execute em modo de desenvolvimento
 
 ```bash
-npm dev
+npm run dev
 ```
 
-### Gerar executável
+### Gere o executável
 
 ```bash
-npm build
+npm run build
 ```
 
 ## 🎯 Objetivo
 
-O FreeDash nasceu com o objetivo de tornar o uso do Xenia mais agradável, eliminando a necessidade de navegar por arquivos executáveis e oferecendo uma experiência semelhante à de dashboards utilizados em consoles modificados.
+O FreeDash nasceu da vontade de oferecer uma experiência semelhante à de dashboards utilizados em consoles modificados, eliminando a necessidade de navegar manualmente por executáveis e pastas para iniciar jogos.
 
-A ideia é transformar a coleção de jogos em uma biblioteca visual, permitindo iniciar títulos rapidamente enquanto o Xenia permanece responsável pela emulação.
+A proposta é transformar a coleção de jogos em uma biblioteca visual e intuitiva, enquanto o Xenia continua responsável pela emulação.
 
 ## 📌 Status
 
-🚧 Em desenvolvimento.
-Novas funcionalidades como gerenciamento de biblioteca, mais opções de personalização e melhorias na integração com o Xenia estão previstas para versões futuras.
+🧪 **Projeto experimental.**
 
- ## ⚠️ Nota
- Este projeto foi desenvolvido como um experimento de **Vibe Coding**. A ideia surgiu por curiosidade em recriar uma experiência semelhante ao Aurora Dashboard para o Xenia utilizando ferramentas de IA para acelerar o desenvolvimento.
-
-O objetivo não foi construir um frontend de produção do zero, mas explorar uma ideia que achei interessante, validar conceitos e entender até onde esse tipo de abordagem pode chegar.
+O FreeDash já é funcional, mas foi criado como uma prova de conceito. Melhorias como gerenciamento mais completo da biblioteca, novas opções de personalização e maior integração com o Xenia podem ser adicionadas futuramente.
