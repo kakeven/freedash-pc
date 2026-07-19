@@ -65,7 +65,7 @@ A ideia é transformar a coleção de jogos em uma biblioteca visual, permitindo
 🚧 Em desenvolvimento.
 Novas funcionalidades como gerenciamento de biblioteca, mais opções de personalização e melhorias na integração com o Xenia estão previstas para versões futuras.
 
- ##⚠️ Nota
+ ## ⚠️ Nota
  Este projeto foi desenvolvido como um experimento de **Vibe Coding**. A ideia surgiu por curiosidade em recriar uma experiência semelhante ao Aurora Dashboard para o Xenia utilizando ferramentas de IA para acelerar o desenvolvimento.
 
 O objetivo não foi construir um frontend de produção do zero, mas explorar uma ideia que achei interessante, validar conceitos e entender até onde esse tipo de abordagem pode chegar.
