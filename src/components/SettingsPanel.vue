@@ -1,0 +1,163 @@
+<script setup>
+import { reactive } from 'vue'
+
+const props = defineProps({
+  settings: { type: Object, required: true }
+})
+const emit = defineEmits(['saved', 'close'])
+
+const form = reactive({
+  gamesFolder: props.settings.gamesFolder,
+  xeniaDataFolder: props.settings.xeniaDataFolder,
+  xeniaPath: props.settings.xeniaPath
+})
+
+async function pickGamesFolder() {
+  const folder = await window.freedash.pickFolder()
+  if (folder) form.gamesFolder = folder
+}
+
+async function pickXeniaDataFolder() {
+  const folder = await window.freedash.pickFolder()
+  if (folder) form.xeniaDataFolder = folder
+}
+
+async function pickXenia() {
+  const file = await window.freedash.pickExecutable()
+  if (file) form.xeniaPath = file
+}
+
+async function save() {
+  const updated = await window.freedash.setSettings({ ...form })
+  emit('saved', updated)
+}
+</script>
+
+<template>
+  <div class="settings">
+    <h2>Configurações</h2>
+
+    <div class="field">
+      <label>Pasta de jogos</label>
+      <div class="row">
+        <input type="text" :value="form.gamesFolder" placeholder="Nenhuma pasta selecionada" readonly />
+        <button class="pick" @click="pickGamesFolder">Escolher…</button>
+      </div>
+      <p class="hint">Cada jogo em uma subpasta com .iso/.xex (+ cover.jpg opcional), ou solto na raiz.</p>
+    </div>
+
+    <div class="field">
+      <label>GameData do Xenia (capas)</label>
+      <div class="row">
+        <input type="text" :value="form.xeniaDataFolder" placeholder="Ex: G:\xenia_manager\GameData" readonly />
+        <button class="pick" @click="pickXeniaDataFolder">Escolher…</button>
+      </div>
+      <p class="hint">
+        Usada como fallback quando não há cover.jpg na pasta do jogo — lê a primeira imagem em
+        GameData/&lt;NomeDoJogo&gt;/Artwork.
+      </p>
+    </div>
+
+    <div class="field">
+      <label>Executável do Xenia</label>
+      <div class="row">
+        <input type="text" :value="form.xeniaPath" placeholder="Nenhum executável selecionado" readonly />
+        <button class="pick" @click="pickXenia">Escolher…</button>
+      </div>
+      <p class="hint">Usado futuramente para lançar os jogos — ainda não integrado nesta versão.</p>
+    </div>
+
+    <div class="actions">
+      <button class="secondary" @click="$emit('close')">Cancelar</button>
+      <button class="primary" @click="save">Salvar</button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.settings {
+  max-width: 560px;
+  margin: 60px auto;
+  padding: 0 32px;
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  margin: 0 0 28px;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+button.pick {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--line);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 3px;
+  font-size: 13px;
+  transition: border-color 0.15s;
+}
+button.pick:hover {
+  border-color: var(--accent-dim);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+button.secondary {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  padding: 10px 20px;
+  border-radius: 3px;
+}
+button.primary {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #0a0d0a;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 3px;
+}
+button.primary:hover {
+  filter: brightness(1.08);
+}
+</style>

@@ -1,0 +1,46 @@
+:root {
+  --bg-void: #0a0d0a;
+  --bg-panel: #10140f;
+  --bg-panel-raised: #171d15;
+  --line: #232b20;
+  --text-primary: #eef2ea;
+  --text-dim: #8a9482;
+  --accent: #b4ff39;
+  --accent-dim: #6f8a2c;
+  --accent-glow: rgba(180, 255, 57, 0.35);
+  --font-display: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: radial-gradient(ellipse at top, #141a10 0%, var(--bg-void) 60%);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow: hidden;
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
