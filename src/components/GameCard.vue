@@ -40,8 +40,8 @@ onMounted(loadCover)
   border-radius: 4px;
   background: var(--bg-panel);
   overflow: visible;
-  transform: scale(0.9);
-  opacity: 0.55;
+  transform: scale(0.88);
+  opacity: 0.4;
   transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -57,6 +57,7 @@ onMounted(loadCover)
   height: 210px;
   transform: translateY(-8px) scale(1);
   opacity: 1;
+  padding-top: 8.5px;
   box-shadow: 0 0 0 1px var(--accent-dim), 0 8px 18px rgba(180, 255, 57, 0.14);
 }
 </style>

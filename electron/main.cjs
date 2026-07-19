@@ -3,12 +3,15 @@ const path = require('node:path')
 const fs = require('node:fs')
 const { spawn } = require('node:child_process')
 const Store = require('electron-store')
+const { parseXzp, extractEntry, detectImageMime } = require('./xzp.cjs')
 
 const store = new Store({
   defaults: {
     gamesFolder: '',
     xeniaDataFolder: '',
-    xeniaPath: ''
+    xeniaPath: '',
+    backgroundPath: '',
+    backgroundXzpEntry: ''
   }
 })
 
@@ -88,7 +91,9 @@ ipcMain.handle('settings:get', () => {
   return {
     gamesFolder: store.get('gamesFolder'),
     xeniaDataFolder: store.get('xeniaDataFolder'),
-    xeniaPath: store.get('xeniaPath')
+    xeniaPath: store.get('xeniaPath'),
+    backgroundPath: store.get('backgroundPath'),
+    backgroundXzpEntry: store.get('backgroundXzpEntry')
   }
 })
 
@@ -96,10 +101,14 @@ ipcMain.handle('settings:set', (_event, partial) => {
   if (typeof partial.gamesFolder === 'string') store.set('gamesFolder', partial.gamesFolder)
   if (typeof partial.xeniaDataFolder === 'string') store.set('xeniaDataFolder', partial.xeniaDataFolder)
   if (typeof partial.xeniaPath === 'string') store.set('xeniaPath', partial.xeniaPath)
+  if (typeof partial.backgroundPath === 'string') store.set('backgroundPath', partial.backgroundPath)
+  if (typeof partial.backgroundXzpEntry === 'string') store.set('backgroundXzpEntry', partial.backgroundXzpEntry)
   return {
     gamesFolder: store.get('gamesFolder'),
     xeniaDataFolder: store.get('xeniaDataFolder'),
-    xeniaPath: store.get('xeniaPath')
+    xeniaPath: store.get('xeniaPath'),
+    backgroundPath: store.get('backgroundPath'),
+    backgroundXzpEntry: store.get('backgroundXzpEntry')
   }
 })
 
@@ -114,6 +123,15 @@ ipcMain.handle('dialog:pickExecutable', async () => {
   const filters =
     process.platform === 'win32' ? [{ name: 'Executável', extensions: ['exe'] }] : undefined
   const result = await dialog.showOpenDialog(mainWindow, { properties: ['openFile'], filters })
+  if (result.canceled || result.filePaths.length === 0) return null
+  return result.filePaths[0]
+})
+
+ipcMain.handle('dialog:pickBackground', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile'],
+    filters: [{ name: 'Imagem, GIF ou tema Xbox (.xzp)', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'xzp'] }]
+  })
   if (result.canceled || result.filePaths.length === 0) return null
   return result.filePaths[0]
 })
@@ -179,6 +197,36 @@ ipcMain.handle('games:readCover', (_event, coverPath) => {
     const data = fs.readFileSync(coverPath)
     const ext = path.extname(coverPath).slice(1)
     return `data:image/${ext};base64,${data.toString('base64')}`
+  } catch {
+    return null
+  }
+})
+
+// --- Leitura de temas .xzp (Aurora/Freestyle Dash) ---
+const XZP_IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.bmp']
+
+ipcMain.handle('xzp:listImages', (_event, xzpPath) => {
+  try {
+    const buf = fs.readFileSync(xzpPath)
+    const entries = parseXzp(buf)
+    return entries
+      .filter((e) => XZP_IMAGE_EXTENSIONS.includes(path.extname(e.name).toLowerCase()))
+      .map((e) => ({ name: e.name, length: e.length }))
+  } catch {
+    return { error: 'xzp-read-failed' }
+  }
+})
+
+ipcMain.handle('xzp:readEntry', (_event, { xzpPath, entryName }) => {
+  try {
+    const buf = fs.readFileSync(xzpPath)
+    const entries = parseXzp(buf)
+    const entry = entries.find((e) => e.name === entryName)
+    if (!entry) return null
+
+    const data = extractEntry(buf, entry)
+    const mime = detectImageMime(data) || 'image/png'
+    return `data:${mime};base64,${data.toString('base64')}`
   } catch {
     return null
   }

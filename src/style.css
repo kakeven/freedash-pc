@@ -8,8 +8,12 @@
   --accent: #b4ff39;
   --accent-dim: #6f8a2c;
   --accent-glow: rgba(180, 255, 57, 0.35);
-  --font-display: 'Rajdhani', sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display: 'Segoe UI', sans-serif;
+  --font-body: 'Segoe UI', sans-serif;
+  --ok-color: #3ddc84;
+  --ok-color-dark: #04231a;
+  --danger-color: #e2545a;
+  --danger-color-dark: #3a0d0f;
 }
 
 * {
@@ -24,7 +28,7 @@ body,
 }
 
 body {
-  background: radial-gradient(ellipse at top, #141a10 0%, var(--bg-void) 60%);
+  background: radial-gradient(ellipse at 50% 30%, #1c2b3a 0%, #0a0d0a 55%, #060805 100%);
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow: hidden;

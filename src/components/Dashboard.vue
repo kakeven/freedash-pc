@@ -84,12 +84,6 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
     </div>
 
     <template v-else>
-      <div class="title-zone">
-        <p class="counter">{{ String(selected + 1).padStart(2, '0') }} / {{ String(games.length).padStart(2, '0') }}</p>
-        <h1>{{ selectedGame?.title }}</h1>
-        <p v-if="launchError" class="launch-error">{{ launchError }}</p>
-      </div>
-
       <div class="blade">
         <GameCard
           v-for="(game, i) in games"
@@ -101,9 +95,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         />
       </div>
 
-      <div class="hints">
-        <span class="hint"><i>←</i><i>→</i> Navegar</span>
-        <span class="hint"><i>↵</i> Selecionar</span>
+      <div class="info-panel">
+        <div class="title-zone">
+          <h1>{{ selectedGame?.title }}</h1>
+          <p class="counter">{{ String(selected + 1).padStart(2, '0') }} de {{ String(games.length).padStart(2, '0') }}</p>
+          <p v-if="launchError" class="launch-error">{{ launchError }}</p>
+        </div>
+
+        <div class="hints">
+          <span class="hint"><span class="badge ok">↵</span>Iniciar</span>
+          <span class="hint"><span class="badge danger">⎋</span>Voltar</span>
+          <span class="hint"><i>←</i><i>→</i>Navegar</span>
+        </div>
       </div>
     </template>
   </div>
@@ -117,14 +120,25 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   justify-content: flex-end;
 }
 
-.title-zone {
-  padding: 0 28px 18px;
+.blade {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 28px 6px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }
-.counter {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  margin: 0 0 6px;
+
+.info-panel {
+  background: rgba(6, 8, 5, 0.7);
+  backdrop-filter: blur(2px);
+  margin-top: 26px;
+}
+
+.title-zone {
+  text-align: center;
+  padding: 14px 28px 6px;
 }
 .title-zone h1 {
   font-family: var(--font-display);
@@ -135,38 +149,54 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   margin: 0;
   color: var(--text-primary);
 }
+.counter {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin: 2px 0 0;
+}
 .launch-error {
   font-size: 12px;
   color: #ff8a6a;
   margin: 8px 0 0;
 }
 
-.blade {
-  display: flex;
-  align-items: flex-end;
-  gap: 18px;
-  padding: 0 28px 24px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-}
-
 .hints {
   display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  padding: 12px 28px;
-  border-top: 1px solid var(--line);
+  justify-content: center;
+  gap: 26px;
+  padding: 10px 28px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 10px;
 }
 .hint {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-dim);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 .hint i {
   font-style: normal;
   font-size: 13px;
+}
+.badge {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.badge.ok {
+  background: var(--ok-color);
+  color: var(--ok-color-dark);
+}
+.badge.danger {
+  background: var(--danger-color);
+  color: var(--danger-color-dark);
 }
 
 .empty-state {

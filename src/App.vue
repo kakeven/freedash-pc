@@ -1,13 +1,25 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Dashboard from './components/Dashboard.vue'
 import SettingsPanel from './components/SettingsPanel.vue'
 
 const showSettings = ref(false)
-const settings = ref({ gamesFolder: '', xeniaDataFolder: '', xeniaPath: '' })
+const settings = ref({ gamesFolder: '', xeniaDataFolder: '', xeniaPath: '', backgroundPath: '', backgroundXzpEntry: '' })
+const backgroundUrl = ref('')
 
 async function loadSettings() {
   settings.value = await window.freedash.getSettings()
+}
+
+async function loadBackground() {
+  if (!settings.value.backgroundPath) {
+    backgroundUrl.value = ''
+    return
+  }
+  const dataUrl = settings.value.backgroundXzpEntry
+    ? await window.freedash.readXzpEntry(settings.value.backgroundPath, settings.value.backgroundXzpEntry)
+    : await window.freedash.readCover(settings.value.backgroundPath)
+  backgroundUrl.value = dataUrl || ''
 }
 
 function handleSettingsSaved(updated) {
@@ -15,11 +27,15 @@ function handleSettingsSaved(updated) {
   showSettings.value = false
 }
 
+watch(() => [settings.value.backgroundPath, settings.value.backgroundXzpEntry], loadBackground)
 onMounted(loadSettings)
 </script>
 
 <template>
   <div class="shell">
+    <div v-if="backgroundUrl" class="app-bg" :style="{ backgroundImage: `url(${backgroundUrl})` }"></div>
+    <div v-if="backgroundUrl" class="app-bg-overlay"></div>
+
     <header class="topbar">
       <span class="brand">FREE<span class="brand-accent">DASH</span></span>
       <div class="tabs">
@@ -46,6 +62,23 @@ onMounted(loadSettings)
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.app-bg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -2;
+}
+
+.app-bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 5, 0.6);
+  z-index: -1;
 }
 
 .topbar {
