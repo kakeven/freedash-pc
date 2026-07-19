@@ -11,6 +11,7 @@
     "electron:build": "vite build && electron-builder"
   },
   "dependencies": {
+    "conf": "^15.1.0",
     "electron-store": "^8.2.0",
     "vue": "^3.4.21"
   },
@@ -18,18 +19,14 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "electron": "^30.0.1",
-    "electron-builder": "^24.13.3",
-    "vite": "^5.2.0",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3",
+    "vite": "^8.1.5",
     "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.kaua.freedash",
     "productName": "FreeDash",
-    "files": [
-      "dist/**/*",
-      "electron/**/*"
-    ],
     "directories": {
       "output": "release"
     },
