@@ -71,6 +71,10 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#0a0d0a',
     autoHideMenuBar: true,
+
+    // Adicione esta linha
+    icon: path.join(__dirname, '..', 'assets', 'icon.png'),
+
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,

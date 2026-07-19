@@ -32,6 +32,14 @@
     ],
     "directories": {
       "output": "release"
+    },
+    "win": {
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "icon": "assets/icon.png"
     }
-  }
+  },
+  "author": "Kauã Keven",
+  "license": "MIT"
 }
