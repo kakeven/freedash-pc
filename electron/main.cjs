@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('node:path')
 const fs = require('node:fs')
+const { spawn } = require('node:child_process')
 const Store = require('electron-store')
 
 const store = new Store({
@@ -181,6 +182,42 @@ ipcMain.handle('games:readCover', (_event, coverPath) => {
   } catch {
     return null
   }
+})
+
+// --- Lançar jogo via Xenia ---
+ipcMain.handle('games:launch', (_event, filePath) => {
+  const xeniaPath = store.get('xeniaPath')
+  if (!xeniaPath || !fs.existsSync(xeniaPath)) {
+    return { error: 'no-xenia-path' }
+  }
+  if (!fs.existsSync(filePath)) {
+    return { error: 'game-not-found' }
+  }
+
+  let child
+  try {
+    child = spawn(xeniaPath, [filePath], { cwd: path.dirname(xeniaPath) })
+  } catch {
+    return { error: 'spawn-failed' }
+  }
+
+  mainWindow?.minimize()
+
+  child.on('exit', () => {
+    if (mainWindow) {
+      mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+
+  child.on('error', () => {
+    if (mainWindow) {
+      mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+
+  return { error: null }
 })
 
 app.whenReady().then(createWindow)

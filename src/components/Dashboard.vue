@@ -35,10 +35,26 @@ function move(delta) {
   selected.value = Math.max(0, Math.min(games.value.length - 1, selected.value + delta))
 }
 
+const launchError = ref('')
+
+async function launch() {
+  if (!selectedGame.value) return
+  launchError.value = ''
+  const result = await window.freedash.launchGame(selectedGame.value.filePath)
+  if (result.error === 'no-xenia-path') {
+    launchError.value = 'Configure o executável do Xenia nas configurações.'
+  } else if (result.error === 'game-not-found') {
+    launchError.value = 'Arquivo do jogo não encontrado.'
+  } else if (result.error) {
+    launchError.value = 'Não foi possível iniciar o Xenia.'
+  }
+}
+
 function onKeydown(e) {
   if (status.value !== 'ready') return
   if (e.key === 'ArrowRight') move(1)
   if (e.key === 'ArrowLeft') move(-1)
+  if (e.key === 'Enter') launch()
 }
 
 watch(() => props.gamesFolder, scan)
@@ -71,6 +87,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       <div class="title-zone">
         <p class="counter">{{ String(selected + 1).padStart(2, '0') }} / {{ String(games.length).padStart(2, '0') }}</p>
         <h1>{{ selectedGame?.title }}</h1>
+        <p v-if="launchError" class="launch-error">{{ launchError }}</p>
       </div>
 
       <div class="blade">
@@ -80,6 +97,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           :game="game"
           :active="i === selected"
           @click="selected = i"
+          @dblclick="selected = i; launch()"
         />
       </div>
 
@@ -117,12 +135,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   margin: 0;
   color: var(--text-primary);
 }
+.launch-error {
+  font-size: 12px;
+  color: #ff8a6a;
+  margin: 8px 0 0;
+}
 
 .blade {
   display: flex;
   align-items: flex-end;
   gap: 18px;
-  padding: 22px 28px 24px;
+  padding: 0 28px 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
 }
