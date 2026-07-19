@@ -35,7 +35,7 @@ O FreeDash organiza sua biblioteca de jogos em uma interface visual com capas, p
 ### Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/freedash.git
+git clone https://github.com/kakeven/freedash-pc.git
 ```
 
 ### Instale as dependências
